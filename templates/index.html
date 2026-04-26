@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Management App</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+            background: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 8px;
+            width: 200px;
+        }
+        button {
+            padding: 8px 12px;
+            background: blue;
+            color: white;
+            border: none;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: white;
+            padding: 10px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        a {
+            color: red;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎓 Student Management System</h1>
+
+    <form method="POST" action="/add">
+        <input type="text" name="name" placeholder="Enter student name" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <ul>
+        {% for student in students %}
+        <li>
+            {{ student[1] }}
+            <a href="/delete/{{ student[0] }}">Delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
