@@ -11,7 +11,7 @@ pipeline {
         // 🔹 1. SOURCE STAGE
         stage('Clone Code') {
             steps {
-                git 'https://github.com/SubenduMandal/student-app.git'
+                git branch: 'main', url: 'https://github.com/SubenduMandal/student-app.git'
             }
         }
 
