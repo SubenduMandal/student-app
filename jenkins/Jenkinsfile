@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "student-app"
+        CONTAINER_NAME = "student-app-container"
+    }
+
+    stages {
+
+        // 🔹 1. SOURCE STAGE
+        stage('Clone Code') {
+            steps {
+                git 'https://github.com/your-username/student-app.git'
+            }
+        }
+
+        // 🔹 2. BUILD STAGE (Docker)
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME -f docker/Dockerfile .'
+            }
+        }
+
+        // 🔹 Test container (optional but good practice)
+        stage('Run Container Test') {
+            steps {
+                sh '''
+                docker stop $CONTAINER_NAME || true
+                docker rm $CONTAINER_NAME || true
+                docker run -d -p 5000:5000 --name $CONTAINER_NAME $IMAGE_NAME
+                '''
+            }
+        }
+
+        // 🔹 3. DEPLOY STAGE (Kubernetes)
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                kubectl apply -f k8s/deployment.yaml
+                kubectl apply -f k8s/service.yaml
+                '''
+            }
+        }
+
+        // 🔹 4. MONITOR STAGE (Nagios - Placeholder)
+        stage('Monitoring Check') {
+            steps {
+                echo "Nagios monitoring is configured separately."
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Pipeline executed successfully!"
+        }
+        failure {
+            echo "❌ Pipeline failed. Check logs."
+        }
+    }
+}
